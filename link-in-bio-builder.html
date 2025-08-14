@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Link-in-Bio Builder (Guns.lol-style)</title>
+<style>
+  :root{
+    --bg:#0b0e14; --card:#121723; --muted:#8a96a3; --text:#e6edf3; --accent:#6ae3ff; --btn:#20293c;
+    --radius:16px; --gap:14px; --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; color:var(--text);
+    background: radial-gradient(1200px 800px at 20% 0%, #15223a 0%, transparent 60%), var(--bg);
+    display:flex; align-items:stretch; justify-content:center;
+  }
+  .wrap{display:grid; grid-template-columns: 480px minmax(320px,560px); gap:24px; width:min(1200px,100%); padding:24px}
+  @media (max-width:980px){ .wrap{grid-template-columns:1fr; padding:16px} }
+
+  .panel{background:var(--card); border:1px solid #243047; border-radius:20px; box-shadow:var(--shadow); overflow:hidden}
+  .panel h2{margin:0; padding:16px 18px; font-size:18px; border-bottom:1px solid #1d2436; background:linear-gradient(#121723,#101522)}
+  .content{padding:18px}
+  .row{display:grid; grid-template-columns:140px 1fr; gap:12px; align-items:center; margin-bottom:12px}
+  .row label{font-size:13px; color:var(--muted)}
+  input[type="text"], input[type="url"], textarea, select{
+    width:100%; padding:12px 12px; border:1px solid #2a3550; background:#0f1422; color:var(--text);
+    border-radius:10px; outline:none;
+  }
+  textarea{min-height:80px; resize:vertical}
+  .flex{display:flex; gap:10px; flex-wrap:wrap}
+  .btn{
+    border:1px solid #2a3550; background:var(--btn); color:var(--text); padding:10px 14px; border-radius:12px;
+    cursor:pointer; transition:transform .05s ease, background .2s ease; user-select:none;
+  }
+  .btn:hover{background:#27334e}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:linear-gradient(180deg,#1d6cff,#1353d6); border-color:#1b4fb0}
+  .btn.ghost{background:transparent}
+  .btn.danger{background:#3a1c24; border-color:#5a2a35}
+  .links{display:flex; flex-direction:column; gap:10px}
+  .link-item{
+    display:grid; grid-template-columns: 1fr 1fr 48px 48px 48px; gap:8px; align-items:center;
+    background:#0f1422; border:1px solid #2a3550; padding:10px; border-radius:12px;
+  }
+  .link-item input{border-radius:8px}
+  .preview{
+    display:flex; align-items:center; justify-content:center; padding:24px; background:
+      radial-gradient(600px 300px at 80% 0%, rgba(106,227,255,.12), transparent 60%),
+      radial-gradient(600px 300px at 0% 100%, rgba(111,66,193,.12), transparent 60%),
+      #0a0e16;
+    min-height:560px;
+  }
+  .card{
+    width:min(420px,100%); background:rgba(16,20,34,.6); backdrop-filter:saturate(1.2) blur(12px);
+    border:1px solid #27334f; border-radius:26px; padding:22px; box-shadow:var(--shadow);
+  }
+  .center{display:flex; flex-direction:column; align-items:center; text-align:center}
+  .avatar{width:104px; height:104px; border-radius:22px; overflow:hidden; border:2px solid #2b3a5c; background:#13192b}
+  .avatar img{width:100%; height:100%; object-fit:cover}
+  .handle{margin-top:10px; color:var(--muted); font-size:14px}
+  .name{font-weight:700; font-size:22px; margin:6px 0 4px}
+  .bio{color:#b9c4d0; font-size:14px; white-space:pre-wrap}
+  .buttons{margin-top:16px; display:flex; flex-direction:column; gap:10px; width:100%}
+  .linkbtn{
+    display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; color:#fff;
+    padding:14px 16px; border-radius:14px; border:1px solid #2a3550; background:#162038; font-weight:600;
+    transition:transform .05s ease, filter .2s ease;
+  }
+  .linkbtn:hover{filter:brightness(1.1)}
+  .footer{margin-top:16px; font-size:12px; color:var(--muted)}
+  .badge{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid #27406b; background:#0e1730; font-size:12px; margin-top:10px}
+  .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .mini{font-size:12px; color:var(--muted)}
+  .sep{height:1px; background:#1d2436; margin:14px 0}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Builder -->
+    <div class="panel">
+      <h2>Profile Builder</h2>
+      <div class="content">
+        <div class="row"><label>Handle (username)</label><input id="handle" type="text" placeholder="quataun" /></div>
+        <div class="row"><label>Display name</label><input id="name" type="text" placeholder="Quataun" /></div>
+        <div class="row"><label>Avatar URL</label><input id="avatar" type="url" placeholder="https://…" /></div>
+        <div class="row"><label>Bio</label><textarea id="bio" placeholder="Short description…"></textarea></div>
+
+        <div class="grid-2">
+          <div class="row"><label>Theme</label>
+            <select id="theme">
+              <option value="ocean">Ocean (default)</option>
+              <option value="midnight">Midnight</option>
+              <option value="candy">Candy</option>
+              <option value="sunset">Sunset</option>
+              <option value="mono">Mono</option>
+            </select>
+          </div>
+          <div class="row"><label>Button Style</label>
+            <select id="buttonStyle">
+              <option value="solid">Solid</option>
+              <option value="outline">Outline</option>
+              <option value="soft">Soft</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+
+        <div class="flex" style="justify-content:space-between;align-items:center">
+          <h3 style="margin:0;font-size:16px;color:#c7d2e0">Links</h3>
+          <div class="flex">
+            <button class="btn" id="addLink">+ Add Link</button>
+            <button class="btn ghost" id="clearLinks" title="Remove all links">Clear</button>
+          </div>
+        </div>
+
+        <div id="links" class="links" aria-live="polite"></div>
+
+        <div class="sep"></div>
+
+        <div class="flex" style="justify-content:space-between">
+          <div class="flex">
+            <button class="btn" id="save">Save Draft</button>
+            <button class="btn" id="load">Load Draft</button>
+          </div>
+          <div class="flex">
+            <button class="btn" id="importBtn">Import JSON</button>
+            <button class="btn primary" id="exportBtn">Export Profile</button>
+          </div>
+        </div>
+
+        <p class="mini">Tip: Use icons like 🔗, 🧊, 🎮, 📷, 🐦 in the “Icon” box to make buttons pop.</p>
+      </div>
+    </div>
+
+    <!-- Live Preview -->
+    <div class="panel">
+      <h2>Live Preview</h2>
+      <div class="preview">
+        <div class="card center" id="previewCard">
+          <div class="avatar"><img id="pAvatar" alt="avatar" src="" /></div>
+          <div class="handle" id="pHandle">@handle</div>
+          <div class="name" id="pName">Display name</div>
+          <div class="badge" id="pBadge" hidden>
+            <span>✅ verified</span>
+          </div>
+          <div class="bio" id="pBio">Your short bio will show here.</div>
+          <div class="buttons" id="pLinks"></div>
+          <div class="footer">Made with <span aria-hidden="true">❤️</span> Link-in-Bio Builder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* -------------------- State -------------------- */
+const $ = sel => document.querySelector(sel);
+const linksEl = $("#links");
+const state = {
+  handle: "", name: "", avatar: "", bio: "",
+  theme: "ocean", buttonStyle: "solid",
+  links: [] // {label,url,icon}
+};
+
+/* -------------------- Helpers -------------------- */
+function sanitizeUrl(u){
+  try {
+    const url = new URL(u);
+    if (!/^https?:$/.test(url.protocol)) throw 0;
+    return url.toString();
+  } catch { return ""; }
+}
+function el(tag, attrs={}, children=[]){
+  const e = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v])=>{
+    if(k==="class") e.className=v; else if(k==="text") e.textContent=v;
+    else if(k.startsWith("on")&&typeof v==="function") e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v);
+  });
+  [].concat(children).forEach(c => c && e.appendChild(c));
+  return e;
+}
+function setTheme(theme){
+  const root = document.documentElement;
+  const themes = {
+    ocean:  {bg:"#0b0e14", card:"#121723", text:"#e6edf3", muted:"#8a96a3", accent:"#6ae3ff", btn:"#20293c"},
+    midnight:{bg:"#07090f", card:"#0d1220", text:"#e2e8f0", muted:"#7a8794", accent:"#8ab4ff", btn:"#171e2e"},
+    candy:  {bg:"#1a0d13", card:"#22141b", text:"#ffeef8", muted:"#e9c3d7", accent:"#ff87d7", btn:"#2b1a23"},
+    sunset: {bg:"#120d0b", card:"#1b1310", text:"#ffe9d6", muted:"#d9b9a7", accent:"#ffb86b", btn:"#2b1d17"},
+    mono:   {bg:"#0d0d0d", card:"#141414", text:"#f3f3f3", muted:"#a3a3a3", accent:"#c9c9c9", btn:"#1e1e1e"},
+  };
+  const t = themes[theme] || themes.ocean;
+  root.style.setProperty('--bg',t.bg);
+  root.style.setProperty('--card',t.card);
+  root.style.setProperty('--text',t.text);
+  root.style.setProperty('--muted',t.muted);
+  root.style.setProperty('--accent',t.accent);
+  root.style.setProperty('--btn',t.btn);
+}
+function buttonClass(style){
+  if(style === "outline") return "linkbtn outline";
+  if(style === "soft") return "linkbtn soft";
+  return "linkbtn";
+}
+
+/* -------------------- UI Bindings -------------------- */
+const fields = ["handle","name","avatar","bio","theme","buttonStyle"];
+fields.forEach(id=>{
+  const node = $("#"+id);
+  node.addEventListener("input", ()=>{
+    state[id] = node.value.trim();
+    if(id==="theme") setTheme(state.theme);
+    render();
+  });
+});
+
+$("#addLink").addEventListener("click", ()=>{
+  state.links.push({label:"New link", url:"https://example.com", icon:"🔗"});
+  renderLinks(); render();
+});
+$("#clearLinks").addEventListener("click", ()=>{
+  if(confirm("Remove all links?")) { state.links = []; renderLinks(); render(); }
+});
+
+/* Save/Load Draft (localStorage) */
+$("#save").addEventListener("click", ()=>{
+  localStorage.setItem("lib_draft", JSON.stringify(state));
+  toast("Draft saved locally");
+});
+$("#load").addEventListener("click", ()=>{
+  const raw = localStorage.getItem("lib_draft");
+  if(!raw) return toast("No draft found");
+  const data = JSON.parse(raw);
+  Object.assign(state, data);
+  fields.forEach(id=> $("#"+id).value = state[id] ?? "");
+  setTheme(state.theme); renderLinks(); render(); toast("Draft loaded");
+});
+
+/* Import JSON */
+$("#importBtn").addEventListener("click", async ()=>{
+  const [file] = await pickFile(["application/json"]);
+  if(!file) return;
+  const text = await file.text();
+  try{
+    const data = JSON.parse(text);
+    if(!data || typeof data !== "object") throw 0;
+    Object.assign(state, { ...state, ...data });
+    fields.forEach(id=> $("#"+id).value = state[id] ?? "");
+    setTheme(state.theme); renderLinks(); render(); toast("Imported");
+  }catch{ toast("Invalid JSON", true); }
+});
+
+/* Export static Profile HTML */
+$("#exportBtn").addEventListener("click", ()=>{
+  const html = buildExportHTML();
+  const blob = new Blob([html], {type:"text/html;charset=utf-8"});
+  const a = document.createElement("a");
+  const safeHandle = state.handle || "profile";
+  a.href = URL.createObjectURL(blob);
+  a.download = `${safeHandle}.html`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 0);
+});
+
+/* -------------------- Renderers -------------------- */
+function render(){
+  $("#pHandle").textContent = state.handle ? "@"+state.handle : "@handle";
+  $("#pName").textContent = state.name || "Display name";
+  $("#pBio").textContent = state.bio || "Your short bio will show here.";
+  const img = $("#pAvatar");
+  img.src = state.avatar || "data:image/svg+xml;utf8," + encodeURIComponent(defaultAvatarSVG());
+  // Links preview
+  const pLinks = $("#pLinks");
+  pLinks.innerHTML = "";
+  state.links.forEach(l=>{
+    const safe = sanitizeUrl(l.url);
+    const a = el("a", {class:buttonClass(state.buttonStyle), href: safe || "#", target:"_blank", rel:"nofollow noopener noreferrer"});
+    a.append(el("span", {text: (l.icon || "🔗") + " " + (l.label || "Link")}));
+    pLinks.append(a);
+  });
+}
+function renderLinks(){
+  linksEl.innerHTML = "";
+  state.links.forEach((l, idx)=>{
+    const label = el("input",{type:"text", value:l.label, placeholder:"Label", oninput:e=>{l.label=e.target.value; render();}});
+    const url = el("input",{type:"url", value:l.url, placeholder:"https://…", oninput:e=>{l.url=e.target.value; render();}});
+    const icon = el("input",{type:"text", value:l.icon||"", placeholder:"Icon (e.g. 🎮)" , oninput:e=>{l.icon=e.target.value; render();}});
+    const up = el("button",{class:"btn", title:"Move up", onclick:()=>{
+      if(idx>0){ [state.links[idx-1], state.links[idx]] = [state.links[idx], state.links[idx-1]]; renderLinks(); render(); }
+    }}, "↑");
+    const down = el("button",{class:"btn", title:"Move down", onclick:()=>{
+      if(idx<state.links.length-1){ [state.links[idx+1], state.links[idx]] = [state.links[idx], state.links[idx+1]]; renderLinks(); render(); }
+    }}, "↓");
+    const del = el("button",{class:"btn danger", title:"Delete", onclick:()=>{
+      state.links.splice(idx,1); renderLinks(); render();
+    }}, "✕");
+
+    const row = el("div",{class:"link-item"});
+    row.append(label, url, icon, up, del);
+    linksEl.append(row);
+  });
+}
+
+/* -------------------- Export HTML -------------------- */
+function buildExportHTML(){
+  const safeAvatar = state.avatar || "";
+  const theme = state.theme, btnStyle = state.buttonStyle;
+  const links = state.links.map(l=>({
+    label:(l.label||"Link").replace(/</g,"&lt;"),
+    url:sanitizeUrl(l.url),
+    icon:l.icon||""
+  })).filter(l=>l.url);
+
+  return `<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>${esc(state.name || state.handle || "My Links")}</title>
+<meta name="description" content="${esc(state.bio || "Link in bio")}"/>
+<style>
+  :root{--text:#e6edf3; --muted:#8a96a3}
+  html,body{height:100%}*{box-sizing:border-box}
+  body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;color:var(--text);background:#0a0e16}
+  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:min(520px,100%);background:rgba(16,20,34,.6);backdrop-filter:saturate(1.2) blur(10px);
+    border:1px solid #27334f;border-radius:26px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .center{display:flex;flex-direction:column;align-items:center;text-align:center}
+  .avatar{width:112px;height:112px;border-radius:22px;overflow:hidden;border:2px solid #2b3a5c;background:#13192b}
+  .avatar img{width:100%;height:100%;object-fit:cover}
+  .handle{margin-top:10px;color:var(--muted);font-size:14px}
+  .name{font-weight:800;font-size:24px;margin:6px 0 4px}
+  .bio{color:#b9c4d0;font-size:14px;white-space:pre-wrap;margin-top:6px}
+  .buttons{margin-top:18px;display:flex;flex-direction:column;gap:12px;width:100%}
+  .linkbtn{display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;color:#fff;
+    padding:14px 16px;border-radius:14px;border:1px solid #2a3550;background:#162038;font-weight:700}
+  .linkbtn.outline{background:transparent;color:#dbe8ff}
+  .linkbtn.soft{background:#222a3f}
+  .footer{margin-top:18px;font-size:12px;color:#8a96a3}
+  /* themes */
+  body[data-theme="midnight"]{background:#05070c}
+  body[data-theme="candy"]{background:#1a0d13}
+  body[data-theme="sunset"]{background:#120d0b}
+  body[data-theme="mono"]{background:#0d0d0d}
+</style>
+</head>
+<body data-theme="${esc(theme)}">
+  <div class="wrap">
+    <main class="card center" role="main">
+      <div class="avatar">${safeAvatar ? `<img alt="avatar" src="${esc(safeAvatar)}"/>` : '${defaultAvatarExport()}'}</div>
+      <div class="handle">${state.handle ? "@"+esc(state.handle) : ""}</div>
+      <h1 class="name">${esc(state.name || "")}</h1>
+      <p class="bio">${esc(state.bio || "")}</p>
+      <div class="buttons">
+        ${links.map(l=>`<a class="linkbtn ${btnStyle}" href="${l.url}" target="_blank" rel="nofollow noopener noreferrer">${esc((l.icon||"") + " " + l.label)}</a>`).join("")}
+      </div>
+      <div class="footer">Powered by a static HTML export ✨</div>
+    </main>
+  </div>
+</body></html>`;
+}
+
+/* -------------------- Utilities -------------------- */
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+                        .replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+function defaultAvatarSVG(){
+  return `
+<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>
+  <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+    <stop offset='0%' stop-color='#6ae3ff'/><stop offset='100%' stop-color='#6f42c1'/></linearGradient></defs>
+  <rect width='100%' height='100%' fill='#0f1422'/>
+  <circle cx='100' cy='100' r='80' fill='url(#g)' opacity='0.25'/>
+  <circle cx='100' cy='90' r='36' fill='#1b2440'/>
+  <rect x='54' y='130' rx='18' ry='18' width='92' height='32' fill='#1b2440'/>
+</svg>`;
+}
+function defaultAvatarExport(){
+  return `<svg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 200 200'>
+    <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='#6ae3ff'/><stop offset='100%' stop-color='#6f42c1'/></linearGradient></defs>
+    <rect width='200' height='200' fill='#0f1422'/>
+    <circle cx='100' cy='100' r='80' fill='url(#g)' opacity='0.25'/>
+    <circle cx='100' cy='90' r='36' fill='#1b2440'/>
+    <rect x='54' y='130' rx='18' ry='18' width='92' height='32' fill='#1b2440'/>
+  </svg>`;
+}
+function toast(msg, err){
+  const t = document.createElement("div");
+  t.textContent = msg;
+  t.style.cssText = "position:fixed;bottom:18px;left:50%;transform:translateX(-50%);padding:10px 14px;border-radius:10px;font-size:14px;border:1px solid #2a3550;background:#121723;color:#e6edf3;box-shadow:0 6px 20px rgba(0,0,0,.35);z-index:9999";
+  if(err) t.style.background = "#3a1c24", t.style.borderColor="#5a2a35";
+  document.body.appendChild(t); setTimeout(()=>t.remove(), 1800);
+}
+function pickFile(acceptArr){
+  return new Promise(resolve=>{
+    const inp = document.createElement("input");
+    inp.type = "file"; if(acceptArr?.length) inp.accept = acceptArr.join(",");
+    inp.onchange = () => resolve(inp.files || []);
+    inp.click();
+  });
+}
+
+/* -------------------- Init with cute defaults -------------------- */
+(function init(){
+  state.handle = "yourname";
+  state.name = "Your Display Name";
+  state.bio = "Hey! These are my links. Thanks for stopping by ✨";
+  state.avatar = "";
+  state.theme = "ocean";
+  state.buttonStyle = "solid";
+  state.links = [
+    {label:"Discord", url:"https://discord.com/invite/yourcode", icon:"🧊"},
+    {label:"YouTube", url:"https://youtube.com/@yourhandle", icon:"▶️"},
+    {label:"Main Website", url:"https://example.com", icon:"🌐"},
+  ];
+  // hydrate form
+  fields.forEach(id=> $("#"+id).value = state[id] ?? "");
+  setTheme(state.theme);
+  renderLinks(); render();
+})();
+</script>
+</body>
+</html>
