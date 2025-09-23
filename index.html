@@ -150,36 +150,28 @@
   </header>
 
   <main>
+    <!-- Visible Welcome Section at first -->
+    <section class="center-content" id="welcomeSection" style="display:flex;">
+      <h1>✨ Welcome to Up.gg!</h1>
+      <p>
+        The best link-in-bio site!<br>
+        <span style="color:#FFD700;">Create an account to get started</span>
+      </p>
+    </section>
+
     <!-- Hidden Create Account Form -->
     <section id="signupSection" class="center-content" style="display:none; margin-top:24px;">
-  <h2 style="color:#FFD700;">Create Your Account</h2>
-  <form id="signupForm" style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:300px;">
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Sign Up</button>
-  </form>
-  <p id="signupMessage" style="margin-top:12px;"></p>
-</section>
-
- <main>
-  <!-- Visible Welcome Section at first -->
-  <section class="center-content" id="welcomeSection" style="display:flex;">
-    <h1>✨ Welcome to Up.gg!</h1>
-    <p>
-      The best link-in-bio site!<br>
-      <span style="color:#FFD700;">Create an account to get started</span>
-    </p>
- <section id="signupSection" class="center-content" style="display:none; margin-top:24px;">
-  <h2 style="color:#FFD700;">Create Your Account</h2>
-  <form id="signupForm" style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:300px;">
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Sign Up</button>
-  </form>
-  <p id="signupMessage" style="margin-top:12px;"></p>
- <button id="backToWelcome" style="margin-top:18px; background:linear-gradient(90deg,#FFD700 0%,#FFA500 100%);color:#222;font-weight:bold;padding:8px 22px;border-radius:10px;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.12);border:2px solid #fffbe6;cursor:pointer;transition:background 0.2s, color 0.2s, box-shadow 0.2s;">Back</button>
-</section>
-</main>
+      <h2 style="color:#FFD700;">Create Your Account</h2>
+      <form id="signupForm" style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:300px;">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Create Account</button>
+      </form>
+      <p id="signupMessage"></p>
+      <button id="backToWelcome" style="margin-top:18px; background:linear-gradient(90deg,#FFD700 0%,#FFA500 100%);color:#222;font-weight:bold;padding:8px 22px;border-radius:10px;font-size:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.12);border:2px solid #fffbe6;cursor:pointer;transition:background 0.2s, color 0.2s, box-shadow 0.2s;">Back</button>
+    </section>
+  </main>
 
   <!-- Scripts -->
   <script src="settings.js"></script>
