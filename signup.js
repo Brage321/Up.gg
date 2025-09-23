@@ -1,36 +1,41 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const openBtn = document.querySelector(".create-account-btn");
+document.addEventListener("DOMContentLoaded", function () {
+  const createAccountBtn = document.querySelector(".create-account-btn");
   const signupSection = document.getElementById("signupSection");
+  const signupForm = document.getElementById("signupForm");
+  const signupMessage = document.getElementById("signupMessage");
+  const welcomeSection = document.getElementById("welcomeSection");
+  const backToWelcome = document.getElementById("backToWelcome");
 
-  if (openBtn && signupSection) {
-    openBtn.addEventListener("click", () => {
-      signupSection.style.display = "flex";
-    });
-  } else {
-    console.error("Element not found:", {
-      openBtn,
-      signupSection
-    });
-  }
+  // Show signup section and hide welcome section
+  createAccountBtn.addEventListener("click", function () {
+    signupSection.style.display = "flex";
+    if (welcomeSection) welcomeSection.style.display = "none";
+  });
 
-  const form = document.getElementById("signupForm");
-  const message = document.getElementById("signupMessage");
+  // Handle signup form submission
+  signupForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-  if (form && message) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+    if (!username || !email || !password) {
+      signupMessage.textContent = "Please fill in all fields.";
+      signupMessage.style.color = "#FFA500";
+      return;
+    }
 
-      if (!email || !password) {
-        message.textContent = "Please fill in both fields.";
-        message.style.color = "#FFA500";
-        return;
-      }
+    const account = { username, email, password };
+    localStorage.setItem("userAccount", JSON.stringify(account));
+    signupMessage.textContent = `Account created for user: ${username}`;
+    signupMessage.style.color = "#00FF99";
+    signupForm.reset();
+  });
 
-      message.textContent = `Account created for ${email}!`;
-      message.style.color = "#00FF99";
-      form.reset();
-    });
-  }
+  // Back button logic
+  backToWelcome.addEventListener("click", function () {
+    signupSection.style.display = "none";
+    signupMessage.textContent = "";
+    if (welcomeSection) welcomeSection.style.display = "flex";
+  });
 });
