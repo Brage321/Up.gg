@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Up.gg Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background: #232526;
+      color: #f3f3f3;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+    .link-card {
+      background: #2a2a2a;
+      padding: 16px;
+      margin: 12px auto;
+      border-radius: 12px;
+      max-width: 400px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    a {
+      color: #FFD700;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="profileName">Loading...</h1>
+  <p id="profileBio"></p>
+  <div id="profileLinks"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const username = window.location.pathname.split("/").pop();
+
+    const profile = JSON.parse(localStorage.getItem("userProfile"));
+    const account = JSON.parse(localStorage.getItem("userAccount"));
+
+    if (account && profile && username === account.username) {
+      document.getElementById("profileName").textContent = profile.name || account.username;
+      document.getElementById("profileBio").textContent = profile.bio || "";
+
+      profile.links.forEach(link => {
+        const card = document.createElement("div");
+        card.className = "link-card";
+        card.innerHTML = `<a href="${link.url}" target="_blank">${link.title}</a>`;
+        document.getElementById("profileLinks").appendChild(card);
+      });
+    } else {
+      document.getElementById("profileName").textContent = "Profile not found";
+    }
+  </script>
+</body>
+</html>
+

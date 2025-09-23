@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LinkUp Builder</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      color: #f3f3f3;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: rgba(34,34,34,0.98);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    }
+
+    .sidebar button {
+      background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+      color: #222;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      border: 2px solid #fffbe6;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar button:hover {
+      background: linear-gradient(90deg, #FFA500 0%, #FFD700 100%);
+      color: #232526;
+      box-shadow: 0 4px 16px rgba(255,215,0,0.15);
+      transform: scale(1.05);
+    }
+
+    /* Main content */
+    .builder-container {
+      flex: 1;
+      padding: 48px;
+      display: none;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #FFD700;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 16px #222;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 16px;
+      display: block;
+      color: #FFD700;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: none;
+      background: #2c2c2c;
+      color: #f3f3f3;
+      font-size: 1rem;
+    }
+
+    .link-block {
+      margin-top: 16px;
+      padding: 12px;
+      background: #2a2a2a;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    }
+
+    .builder-container button {
+      background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+      color: #222;
+      font-weight: bold;
+      padding: 10px 24px;
+      border-radius: 14px;
+      font-size: 1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.22);
+      cursor: pointer;
+      border: 2px solid #fffbe6;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
+      margin-top: 18px;
+    }
+
+    .builder-container button:hover {
+      background: linear-gradient(90deg, #FFA500 0%, #FFD700 100%);
+      color: #232526;
+      box-shadow: 0 4px 16px rgba(255,215,0,0.15);
+      transform: scale(1.05);
+    }
+
+    #builderMessage {
+      margin-top: 12px;
+      font-weight: bold;
+      color: #00FF99;
+      text-align: center;
+    }
+
+    #profileLinkDisplay {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: #FFD700;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <button id="settingsBtn">Settings</button>
+    <!-- Add more buttons here later -->
+  </div>
+
+  <!-- Main Builder Form -->
+  <div class="builder-container" id="builderFormSection">
+    <h1>🎨 Build Your Link-in-Bio Page</h1>
+
+    <label for="displayName">Display Name</label>
+    <input type="text" id="displayName" placeholder="Your name" />
+
+    <label for="bio">Bio</label>
+    <textarea id="bio" placeholder="Short bio"></textarea>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="Your email" />
+
+    <label for="discord">Discord Handle</label>
+    <input type="text" id="discord" placeholder="e.g. brage#1234" />
+
+    <h2 style="color:#FFD700; margin-top:32px;">🔗 Your Links</h2>
+    <div id="linksContainer"></div>
+    <button id="addLinkBtn">Add Link</button>
+
+    <h2 style="color:#FFD700;">🔗 Your Profile Link</h2>
+    <p id="profileLinkDisplay"></p>
+    <button id="copyLinkBtn">Copy Link</button>
+
+    <button id="saveProfileBtn">Save Profile</button>
+
+    <p id="builderMessage"></p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const account = JSON.parse(localStorage.getItem("userAccount"));
+      if (!account || !localStorage.getItem("loggedIn")) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Auto-fill Display Name
+      const displayNameInput = document.getElementById("displayName");
+      displayNameInput.value = account.username;
+
+      // Generate profile link
+      const profileLink = `https://up.gg/${account.username}`;
+      document.getElementById("profileLinkDisplay").textContent = profileLink;
+
+      const linksContainer = document.getElementById("linksContainer");
+      const addLinkBtn = document.getElementById("addLinkBtn");
+      const saveBtn = document.getElementById("saveProfileBtn");
+      const shareBtn = document.getElementById("copyLinkBtn");
+      const builderMessage = document.getElementById("builderMessage");
+      const settingsBtn = document.getElementById("settingsBtn");
+      const builderFormSection = document.getElementById("builderFormSection");
+
+      // Toggle form visibility
+      settingsBtn.addEventListener("click", () => {
+        builderFormSection.style.display = builderFormSection.style.display === "none" ? "block" : "none";
+      });
+
+      addLinkBtn.addEventListener("click", () => {
+        const linkBlock = document.createElement("div");
+        linkBlock.className = "link-block";
+        linkBlock.innerHTML = `
+          <input type="text" placeholder="Link Title" />
+          <input type="url" placeholder="https://example.com" />
+          <button onclick="this.parentElement.remove()">Remove</button>
+        `;
+        linksContainer.appendChild(linkBlock);
+      });
+
+      saveBtn.addEventListener("click", () => {
+        const profile = {
+          name: displayNameInput.value.trim(),
+          bio: document.getElementById("bio").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          discord: document.getElementById("discord").value.trim(),
+          links: Array.from(linksContainer.children).map(link => ({
+            title: link.children[0].value.trim(),
+            url: link.children[1].value.trim()
+          })).filter(link => link.title && link.url)
+        };
+
+        localStorage.setItem("userProfile", JSON.stringify(profile));
+        builderMessage.textContent = "✅ Profile saved!";
+      });
+
+      shareBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(profileLink);
+        builderMessage.textContent = "🔗 Link copied to clipboard!";
+      });
+
+      // Show form by default
+      builderFormSection.style.display = "block";
+    });
+  </script>
+</body>
+</html>
+
