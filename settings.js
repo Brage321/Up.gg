@@ -11,5 +11,3 @@ document.addEventListener("DOMContentLoaded", () => {
     frame.style.display = "none"; // Hide the frame
   });
 });
-
-
