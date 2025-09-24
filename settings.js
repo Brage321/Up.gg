@@ -3,11 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("closeSettings");
   const frame = document.getElementById("settingsFrame");
 
-  openBtn.addEventListener("click", () => {
-    frame.style.display = "block"; // Show the frame
-  });
+  if (openBtn && frame) {
+    openBtn.addEventListener("click", () => {
+      frame.style.display = "block"; // Show the frame
+    });
+  }
 
-  closeBtn.addEventListener("click", () => {
-    frame.style.display = "none"; // Hide the frame
-  });
+  if (closeBtn && frame) {
+    closeBtn.addEventListener("click", () => {
+      frame.style.display = "none"; // Hide the frame
+    });
+  }
 });
