@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+  localStorage.removeitem("loggedIn");
+  
   const createAccountBtn = document.querySelector(".create-account-btn");
   const signupSection = document.getElementById("signupSection");
   const signupForm = document.getElementById("signupForm");
@@ -57,3 +59,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+
