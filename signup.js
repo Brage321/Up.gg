@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  localStorage.removeItem("loggedIn")
+
+  
   const createAccountBtn = document.querySelector(".create-account-btn");
   const signupSection = document.getElementById("signupSection");
   const signupForm = document.getElementById("signupForm");
@@ -25,11 +28,17 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    const account = { username, email, password };
+    // Save only username and email (no password)
+    const account = { username, email };
     localStorage.setItem("userAccount", JSON.stringify(account));
+    localStorage.setItem("loggedIn", "true"); // simulate login
+
     signupMessage.textContent = `Account created for user: ${username}`;
     signupMessage.style.color = "#00FF99";
     signupForm.reset();
+
+    // Redirect to builder page immediately
+    window.location.href = "builder.html";
   });
 
   // Back button logic
@@ -38,4 +47,17 @@ document.addEventListener("DOMContentLoaded", function () {
     signupMessage.textContent = "";
     if (welcomeSection) welcomeSection.style.display = "flex";
   });
+
+  // Optional: check login status on page load
+  if (localStorage.getItem("loggedIn") === "true") {
+    const account = JSON.parse(localStorage.getItem("userAccount"));
+    if (account && account.username) {
+      signupMessage.textContent = `Welcome back, ${account.username}!`;
+      signupMessage.style.color = "#00FF99";
+
+      // Redirect returning users to builder page
+      window.location.href = "builder.html";
+    }
+  }
 });
+
