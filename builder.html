@@ -162,15 +162,7 @@
     <p id="builderMessage"></p>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const account = JSON.parse(localStorage.getItem("userAccount"));
-      if (!account || !localStorage.getItem("loggedIn")) {
-        window.location.href = "index.html";
-        return;
-      }
-
-      // Auto-fill Display Name
+  // Auto-fill Display Name
       const displayNameInput = document.getElementById("displayName");
       displayNameInput.value = account.username;
 
@@ -229,5 +221,6 @@
   </script>
 </body>
 </html>
+
 
 
