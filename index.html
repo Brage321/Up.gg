@@ -7,8 +7,159 @@
   <title>Up.gg - Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* All your CSS styles from the original message */
-    /* ... (unchanged for brevity) ... */
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      color: #f3f3f3;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      image-rendering: pixelated;
+      min-height: 100vh;
+    }
+    header {
+      background: #1a1a1a;
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+    }
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+    .logo-icon {
+      height: 100px;
+      width: 100px;
+    }
+    .site-name {
+      font-size: 2.4rem;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px #f9f8ee, 0 0 16px #f7f7f6;
+    }
+    .site-name .dot {
+      color: #ffd900;
+      text-shadow: 0 0 12px #d5bb26, 0 0 24px #aee711;
+    }
+    .create-account-btn {
+      background: linear-gradient(90deg, #FFD700 0%, #f1c36f 100%);
+      color: #222;
+      font-weight: bold;
+      padding: 10px 28px;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.22);
+      cursor: pointer;
+      border: 2px solid #fffbe6;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
+      letter-spacing: 1px;
+    }
+    .create-account-btn:hover {
+      background: linear-gradient(90deg, #FFA500 0%, #FFD700 100%);
+      color: #232526;
+      box-shadow: 0 4px 16px rgba(255,215,0,0.15);
+      transform: scale(1.05);
+    }
+    .center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      max-width: 700px;
+      margin: 0 auto;
+      background: rgba(40,40,40,0.93);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      margin-top: 48px;
+      animation: fadeIn 1.2s;
+      padding: 24px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    h1 {
+      font-size: 2.2rem;
+      color: #FFD700;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 16px #222;
+    }
+    p {
+      font-size: 1.15rem;
+      color: #f3f3f3;
+      margin-bottom: 24px;
+    }
+    footer {
+      text-align: center;
+      padding: 24px 0;
+      background: rgba(34,34,34,0.98);
+      border-radius: 0 0 18px 18px;
+      margin-top: 32px;
+      font-size: 1rem;
+      box-shadow: 0 -2px 16px rgba(0,0,0,0.08);
+    }
+    @media (max-width: 700px) {
+      .center-content {
+        padding: 24px 4vw;
+        margin-top: 24px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+    #settingsFrame {
+      display: none;
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2c2c2c;
+      border: 2px solid #FFD700;
+      padding: 20px;
+      border-radius: 14px;
+      z-index: 1000;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      animation: fadeIn 0.4s ease-out;
+    }
+    #settingsFrame h2 {
+      color: #FFD700;
+    }
+    #settingsFrame p {
+      color: #f3f3f3;
+    }
+    #closeSettings {
+      margin-top: 12px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #FFD700;
+      color: #222;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    #signupForm input {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 100%;
+    }
+    #signupForm button {
+      background: #FFD700;
+      color: #222;
+      font-weight: bold;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -42,36 +193,33 @@
     </section>
   </main>
 
-  <!-- Scripts -->
-  <script src="settings.js"></script>
-  <script type="module" src="signup.js"></script>
-
   <!-- Terms & Privacy Modal -->
   <div id="termsModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;z-index:9999;">
     <div style="background:#2c2c2c;padding:28px;border-radius:16px;box-shadow:0 0 24px rgba(0,0,0,0.3);max-width:400px;text-align:center;border:2px solid #FFD700;">
       <h2 style="color:#FFD700;margin-bottom:12px;">Terms & Privacy</h2>
-      <p style="color:#f3f3f3;font-size:1.1rem;">
-        By using this site, you agree to our
-        <a href="terms.html" target="_blank" style="color:#FFD700;text-decoration:none;">terms</a> and
-        <a href="privacy.html" target="_blank" style="color:#FFD700;text-decoration:none;">privacy</a>.
-      </p>
-      <button id="closeTerms" style="margin-top:20px; background:linear-gradient(90deg,#FFD700 0%,#FFA500 100%); color:#222; font-weight:bold; padding:10px 24px; border-radius:10px; font-size:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.12); border:2px solid #fffbe6; cursor:pointer; transition:background 0.2s, color 0.2s, box-shadow 0.2s;">
-        I ACCEPT
-      </button>
-    </div>
-  </div>
+   <p style="color:#f3f3f3;font-size:1.1rem;">
+  By using this site, you agree to our
+  <a href="terms.html" target="_blank" style="color:#FFD700;text-decoration:none;">terms</a> and
+  <a href="privacy.html" target="_blank" style="color:#FFD700;text-decoration:none;">privacy</a>.
+</p>
+<button id="closeTerms" style="margin-top:20px; background:linear-gradient(90deg,#FFD700 0%,#FFA500 100%); color:#222; font-weight:bold; padding:10px 24px; border-radius:10px; font-size:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.12); border:2px solid #fffbe6; cursor:pointer; transition:background 0.2s, color 0.2s, box-shadow 0.2s;">
+  I ACCEPT
+</button>
+<script>
+  document.getElementById("closeTerms").addEventListener("click", () => {
+    // Hide the modal
+    document.getElementById("termsModal").style.display = "none";
 
-  <script>
-    document.getElementById("closeTerms").addEventListener("click", () => {
+    // Hide the button itself (optional — only if you want it gone too)
+    document.getElementById("closeTerms").style.display = "none";
+
+    // Save acceptance so modal stays hidden next time
+    localStorage.setItem("termsAccepted", "false");
+  });
+
+  window.onload = function () {
+    if (localStorage.getItem("termsAccepted") === "tru") {
       document.getElementById("termsModal").style.display = "none";
-      localStorage.setItem("termsAccepted", "true");
-    });
-
-    window.onload = function () {
-      if (localStorage.getItem("termsAccepted") === "true") {
-        document.getElementById("termsModal").style.display = "none";
-      }
-    };
-  </script>
-</body>
-</html>
+    }
+  };
+</script>
