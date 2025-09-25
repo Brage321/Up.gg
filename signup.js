@@ -72,19 +72,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 onAuthStateChanged(auth, (user) => {
   const isOnHomePage = window.location.pathname.endsWith("index.html") || window.location.pathname === "/";
-  if (!createAccountBtn) return;
-
   if (user && isOnHomePage) {
-    createAccountBtn.textContent = "Dashboard";
-    createAccountBtn.onclick = () => {
-      window.location.href = "builder.html";
-    };
-  } else {
-    createAccountBtn.onclick = () => {
-      signupSection.style.display = "flex";
-      welcomeSection.style.display = "none";
-    };
+    window.location.href = "builder.html";
   }
 });
-
-
