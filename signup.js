@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "htt
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyBxe2zBAOSa0FBbCJk1mozdbfZGqApHc8s",
+  apiKey: "",
   authDomain: "linkup-3027c.firebaseapp.com",
   projectId: "linkup-3027c",
   storageBucket: "linkup-3027c.appspot.com",
@@ -76,3 +76,4 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = "builder.html";
   }
 });
+
